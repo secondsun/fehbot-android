@@ -8,9 +8,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+
     defaultConfig {
-        applicationId "com.feedhenry.oauth.oauth_android_app"
-        minSdkVersion 10
+        applicationId "org.feedhenry.demo.gcmtopicsdemo"
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -47,9 +48,23 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4'
     androidTestCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
 
-    compile 'junit:junit:4.12'
+    compile 'com.android.support:design:23.+'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.+'
     compile 'com.feedhenry:fh-android-sdk:3.0.0'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile('org.jboss.aerogear:aerogear-android-push:2.2.2') {
+        exclude group : 'com.google.android.gms';
+    }
+    compile 'com.android.support:appcompat-v7:23.+'
+    compile 'com.android.support:design:23.+'
+    compile 'com.android.support:cardview-v7:23.+'
+    compile 'com.android.support:recyclerview-v7:23.+'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.dagger:dagger:1.2.+'
+    compile 'com.google.android.gms:play-services-base:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.android.support:support-v4:23.+'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }

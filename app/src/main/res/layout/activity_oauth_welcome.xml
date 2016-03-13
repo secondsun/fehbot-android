@@ -27,7 +27,7 @@
     tools:context=".OAuthWelcome">
 
     <TextView
-        android:id="@+id/repsonse"
+        android:id="@+id/response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start_up_message" />
@@ -40,6 +40,14 @@
         android:layout_centerHorizontal="true"
         android:indeterminate="true" />
 
+    <EditText
+        android:id="@+id/irc_nick"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:hint="Enter IRC nick"/>
+
     <Button
         android:id="@+id/log_in"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -49,16 +57,5 @@
         android:layout_centerHorizontal="true"
         android:text="@string/log_in"
         android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/log_out"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/log_out"
-        android:visibility="gone" />
-
 
 </RelativeLayout>

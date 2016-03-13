@@ -20,13 +20,28 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.feedhenry.oauth.oauth_android_app.permission.C2D_MESSAGE" />
+
+    <permission
+        android:name="ocom.feedhenry.oauth.oauth_android_app.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+
     <application
+        android:name=".FehBotApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".OAuthWelcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,10 +50,31 @@
             </intent-filter>
         </activity>
         <activity android:name="com.feedhenry.sdk.oauth.FHOAuthIntent" />
-        <activity
-            android:name="com.feedhenry.helloworld.test.activity.StubFHOAuthActivity"
-            android:label="@string/title_activity_stub_fhoauth"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <provider
+            android:name=".content.FehBotContentProvider"
+            android:authorities="org.feedhenry.fehbot"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".DisplayCode" />
+        <activity android:name=".ShowMessages"></activity>
+
+        <receiver
+            android:name="org.jboss.aerogear.android.unifiedpush.gcm.AeroGearGCMMessageReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.feedhenry.oauth.oauth_android_app" />
+            </intent-filter>
+            <meta-data
+                android:name="DEFAULT_MESSAGE_HANDLER_KEY"
+                android:value="com.feedhenry.oauth.oauth_android_app.ShowMessageNotification" />
+        </receiver>
+
+
     </application>
 
 </manifest>

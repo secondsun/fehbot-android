@@ -15,15 +15,30 @@
  */
 package com.feedhenry.oauth.oauth_android_app;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
+import com.feedhenry.oauth.oauth_android_app.content.contract.FehMessageContract;
+import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
 import com.feedhenry.sdk.FH;
 import com.feedhenry.sdk.FHActCallback;
 import com.feedhenry.sdk.FHResponse;
+import com.feedhenry.sdk.PushConfig;
 import com.feedhenry.sdk.api.FHAuthRequest;
 import com.feedhenry.sdk.api.FHAuthSession;
+import com.feedhenry.sdk.api.FHCloudRequest;
+import com.feedhenry.sdk.utils.DataManager;
+import com.feedhenry.sdk2.FHHttpClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
+import org.json.fh.JSONObject;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 /**
  * This abstract class contains all of the important FHOAuth code.
@@ -31,7 +46,7 @@ import com.feedhenry.sdk.api.FHAuthSession;
 public abstract class FHOAuth extends AppCompatActivity {
 
     private static final String TAG = "FHAuthActivity";
-    private static final String FH_AUTH_POLICY = "Google";  //"Google" should be replaced with policy id you created;
+    private static final String FH_AUTH_POLICY = "Android";
 
     @Override
     public void onStart() {
@@ -74,54 +89,125 @@ public abstract class FHOAuth extends AppCompatActivity {
         // nticated
         boolean exists = FHAuthSession.exists();
         if (exists) {
-            //user is already authenticated
-            //optionally we can also verify the session is actually valid from client. This requires network connection.
-            FHAuthSession.verify(new FHAuthSession.Callback() {
-                @Override
-                public void handleSuccess(final boolean isValid) {
-                    if (isValid)
-                        onSessionValid(FHAuthSession.getToken());
-                    else
-                        onNotLoggedIn();
-                }
+            Cursor cursor = getContentResolver().query(FehAccountContract.URI, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                if (cursor.getShort(FehAccountContract.VERIFIED_IDX) > 0) {
 
-                @Override
-                public void handleError(FHResponse resp) {
-                    Log.d(TAG, resp.getErrorMessage());
-                    Toast.makeText(FHOAuth.this, "Error validating session", Toast.LENGTH_LONG).show();
+                    PushConfig config = new PushConfig();
+                    config.setAlias(cursor.getString(FehAccountContract.SUB_IDX));
+                    FH.pushRegister(config, new FHActCallback() {
+                        @Override
+                        public void success(FHResponse fhResponse) {
+                            Intent displayCodeIntent = new Intent(FHOAuth.this, ShowMessages.class);
+                            startActivity(displayCodeIntent);
+                            finish();
+                        }
+
+                        @Override
+                        public void fail(FHResponse fhResponse) {
+                            Toast.makeText(FHOAuth.this, fhResponse.getErrorMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                } else {
                     onNotLoggedIn();
                 }
-            }, false);
+            } else {
+                onNotLoggedIn();
+            }
+            cursor.close();
+
         } else {
             onNotLoggedIn();
         }
 
     }
 
-    protected void doOAuth() {
+    protected void doAuth(GoogleSignInResult result, final String ircNick) {
+        FHAuthRequest authRequest = new FHAuthRequest(getApplicationContext(), new com.feedhenry.sdk.api2.FHAuthSession(DataManager.getInstance(), new FHHttpClient()));
+        authRequest.setAuthUser("Android", result.getSignInAccount().getIdToken(), "!");
         try {
-            FHAuthRequest authRequest = FH.buildAuthRequest();
-            authRequest.setPresentingActivity(this);
-            authRequest.setAuthPolicyId(FH_AUTH_POLICY);
             authRequest.executeAsync(new FHActCallback() {
-
                 @Override
-                public void success(FHResponse resp) {
-                    onSessionValid(FHAuthSession.getToken());
+                public void success(FHResponse fhResponse) {
+                    //Get Account
+                    FHCloudRequest req = new FHCloudRequest(getApplicationContext());
+                    req.setPath("/account/me");
+                    req.setMethod(FHCloudRequest.Methods.GET);
+                    try {
+                        req.executeAsync(new FHActCallback() {
+                            @Override
+                            public void success(FHResponse fhResponse) {
+                                //sub,picture, email,name
+                                JSONObject response = fhResponse.getJson();
+                                String sub = response.getString("sub");
+                                String picture = response.getString("picture");
+                                String email = response.getString("email");
+                                String name = response.getString("name");
+
+                                final FehAccount account = new FehAccount(sub, picture, name, email);
+
+                                PushConfig config = new PushConfig();
+                                config.setAlias(sub);
+                                FH.pushRegister(config, new FHActCallback() {
+                                    @Override
+                                    public void success(FHResponse fhResponse) {
+                                        saveAndLinkAccount(account, ircNick);
+                                    }
+
+                                    @Override
+                                    public void fail(FHResponse fhResponse) {
+                                        Toast.makeText(FHOAuth.this, fhResponse.getErrorMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void fail(FHResponse fhResponse) {
+                                Toast.makeText(FHOAuth.this, fhResponse.getErrorMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
-                public void fail(FHResponse resp) {
-                    Toast.makeText(FHOAuth.this, "Log in failed", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, resp.getErrorMessage());
+                public void fail(FHResponse fhResponse) {
                     onNotLoggedIn();
                 }
             });
-        } catch (Exception e) {
-            Toast.makeText(FHOAuth.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e(TAG, e.getMessage(), e);
-            onNotLoggedIn();
+        } catch (Exception ignore) {
+
         }
+    }
+
+    protected void saveAndLinkAccount(FehAccount account, String ircNick){
+        account.save(this);
+        FHCloudRequest req = new FHCloudRequest(this);
+        req.setMethod(FHCloudRequest.Methods.POST);
+        req.setPath("/account/link");
+        req.setRequestArgs(new JSONObject().append("ircNick",ircNick).  append("sub", account.getSub()).append( "name", account.getName()).append("email", account.getName()).append("picture", account.getPicture()));
+        try {
+            req.executeAsync(new FHActCallback() {
+                @Override
+                public void success(FHResponse fhResponse) {
+                    String code = fhResponse.getJson().optString("code");
+                    onInitComplete(code);
+                }
+
+                @Override
+                public void fail(FHResponse fhResponse) {
+                    Toast.makeText(FHOAuth.this, fhResponse.getErrorMessage(), Toast.LENGTH_LONG).show();
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(FHOAuth.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
     }
 
 
@@ -136,11 +222,9 @@ public abstract class FHOAuth extends AppCompatActivity {
     public abstract void onNotLoggedIn();
 
     /**
-     * The user is logged in and has a valid session
-     *
-     * @param sessionToken this is the token for the current session.  FH will append it to all requests automatically
+     * Called when the application is fully set up
      */
-    protected abstract void onSessionValid(String sessionToken);
+    public abstract void onInitComplete(String code);
 
 
 }

@@ -15,13 +15,25 @@
  */
 package com.feedhenry.oauth.oauth_android_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.feedhenry.sdk.FHActCallback;
+import com.feedhenry.sdk.FHResponse;
+import com.feedhenry.sdk.api.FHAuthRequest;
 import com.feedhenry.sdk.api.FHAuthSession;
+import com.feedhenry.sdk.utils.DataManager;
+import com.feedhenry.sdk2.FHHttpClient;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,39 +44,45 @@ import butterknife.OnClick;
  */
 public class OAuthWelcome extends FHOAuth {
 
-    @Bind(R.id.repsonse) TextView response;
-    @Bind(R.id.progress_bar) View progressBar;
-    @Bind(R.id.log_in) View logInButton;
-    @Bind(R.id.log_out) View logOutButton;
-
+    private static final int RC_SIGN_IN = 0x01100;
+    private TextView response;
+    private View progressBar;
+    private View logInButton;
+    private EditText ircNick;
+    @Inject GoogleApiClient googleApiClient;
 
     private static final String TAG = "FHAuthActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oauth_welcome);
-        ButterKnife.bind(this);
+        response = (TextView) findViewById(R.id.response);
+        progressBar = findViewById(R.id.progress_bar);
+        logInButton = findViewById(R.id.log_in);
+        logInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+        });
+        ircNick = (EditText) findViewById(R.id.irc_nick);
+        ((FehBotApplication) getApplicationContext()).getObjectGraph().inject(this);
+
     }
 
 
     @OnClick(R.id.log_in)
     public void login() {
-        doOAuth();
-    }
-
-    @OnClick(R.id.log_out)
-    public void logout() {
-        try {
-            FHAuthSession.clear(false);
-            checkSession();
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e(TAG, e.getMessage(), e);
+        if (ircNick.getText().toString().isEmpty()) {
+            Toast.makeText(this, "You must enter an IRC nick.", Toast.LENGTH_LONG).show();
+            return;
         }
-
+        GoogleApiClient apiClient = googleApiClient;
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
+        startActivityForResult(signInIntent, OAuthWelcome.RC_SIGN_IN);
     }
-
 
     @Override
     public void onFHReady() {
@@ -81,14 +99,37 @@ public class OAuthWelcome extends FHOAuth {
         response.setText(getString(R.string.not_logged_in_message));
         progressBar.setVisibility(View.GONE);
         logInButton.setVisibility(View.VISIBLE);
-        logOutButton.setVisibility(View.GONE);
+        ircNick.setVisibility(View.VISIBLE);
+    }
+
+
+    @Override
+    public void onInitComplete(String code) {
+        if (code != null) {
+            Intent displayCodeIntent = new Intent(this, DisplayCode.class);
+            displayCodeIntent.putExtra("code", code);
+            startActivity(displayCodeIntent);
+            finish();
+        } else {
+            Intent displayCodeIntent = new Intent(this, ShowMessages.class);
+            startActivity(displayCodeIntent);
+            finish();
+        }
     }
 
     @Override
-    public void onSessionValid(String sessionToken) {
-        response.setText(String.format(getString(R.string.logged_in_message), sessionToken));
-        progressBar.setVisibility(View.GONE);
-        logInButton.setVisibility(View.GONE);
-        logOutButton.setVisibility(View.VISIBLE);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (RC_SIGN_IN == requestCode) {
+            if (resultCode != RESULT_OK) {
+                return;
+            }
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            doAuth(result, ircNick.getText().toString());
+
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
+
 }
