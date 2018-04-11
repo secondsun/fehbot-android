@@ -1,15 +1,16 @@
-package com.feedhenry.oauth.oauth_android_app.push;
+package org.aerogear.oauth.oauth_android_app.push;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Bundle;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehAccount;
+
+import java.util.Map;
 
 public final class AccountLinkHandler {
 
-    public static void SaveAccountAsLinked(Context context, Bundle message) {
+    public static void SaveAccountAsLinked(Context context, Map<String, String> message) {
         Cursor cursor = context.getContentResolver().query(FehAccountContract.URI, null, null, null, null);
         if (cursor.moveToFirst()) {
             FehAccount account = new FehAccount(cursor.getString(FehAccountContract.SUB_IDX),

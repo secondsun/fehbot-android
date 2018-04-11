@@ -1,4 +1,4 @@
-package com.feedhenry.oauth.oauth_android_app.content;
+package org.aerogear.oauth.oauth_android_app.content;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,10 +8,10 @@ import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehMessageContract;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehMessage;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehMessageContract;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehAccount;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehMessage;
 
 public class FehBotContentProvider extends ContentProvider {
     private SharedPreferences store;

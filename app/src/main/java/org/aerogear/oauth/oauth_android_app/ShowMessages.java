@@ -1,4 +1,4 @@
-package com.feedhenry.oauth.oauth_android_app;
+package org.aerogear.oauth.oauth_android_app;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -20,10 +20,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehMessageContract;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehMessage;
-import com.feedhenry.oauth.oauth_android_app.push.AccountLinkHandler;
-import com.feedhenry.oauth.oauth_android_app.push.FehMessageHandler;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehMessageContract;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehMessage;
+import org.aerogear.oauth.oauth_android_app.push.AccountLinkHandler;
+import org.aerogear.oauth.oauth_android_app.push.FehMessageHandler;
 
 import org.jboss.aerogear.android.unifiedpush.MessageHandler;
 import org.jboss.aerogear.android.unifiedpush.RegistrarManager;

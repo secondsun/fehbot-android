@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.feedhenry.oauth.oauth_android_app;
+package org.aerogear.oauth.oauth_android_app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,20 +23,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.feedhenry.sdk.FHActCallback;
-import com.feedhenry.sdk.FHResponse;
-import com.feedhenry.sdk.api.FHAuthRequest;
-import com.feedhenry.sdk.api.FHAuthSession;
-import com.feedhenry.sdk.utils.DataManager;
-import com.feedhenry.sdk2.FHHttpClient;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,7 +40,7 @@ public class OAuthWelcome extends FHOAuth {
     private View progressBar;
     private View logInButton;
     private EditText ircNick;
-    @Inject GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
 
     private static final String TAG = "FHAuthActivity";
 
@@ -68,8 +59,14 @@ public class OAuthWelcome extends FHOAuth {
             }
         });
         ircNick = (EditText) findViewById(R.id.irc_nick);
-        ((FehBotApplication) getApplicationContext()).getObjectGraph().inject(this);
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestServerAuthCode("272275396485-ke3ehqieoois0g69r66dh3ap7uc3d56h.apps.googleusercontent.com")
+                .requestIdToken("272275396485-ke3ehqieoois0g69r66dh3ap7uc3d56h.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        this.googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
     }
 
 

@@ -1,4 +1,4 @@
-package com.feedhenry.oauth.oauth_android_app;
+package org.aerogear.oauth.oauth_android_app;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehMessage;
-import com.feedhenry.oauth.oauth_android_app.util.ImageFromNameMaker;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehMessage;
+import org.aerogear.oauth.oauth_android_app.util.ImageFromNameMaker;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -3,9 +3,13 @@
 buildscript {
     repositories {
         jcenter()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0-alpha1'
+        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
     }
 }
 
@@ -13,7 +17,8 @@ allprojects {
     repositories {
         jcenter()
         mavenLocal()
-        maven { url "https://github.com/feedhenry/fh-android-sdk-repository/raw/master/releases" }
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 
     }
 }

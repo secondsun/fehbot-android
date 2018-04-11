@@ -1,9 +1,9 @@
-package com.feedhenry.oauth.oauth_android_app.content.vo;
+package org.aerogear.oauth.oauth_android_app.content.vo;
 
 import android.content.Context;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehMessageContract;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehMessageContract;
 
 import java.util.Date;
 

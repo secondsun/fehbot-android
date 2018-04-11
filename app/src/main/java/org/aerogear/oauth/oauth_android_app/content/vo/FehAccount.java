@@ -1,8 +1,8 @@
-package com.feedhenry.oauth.oauth_android_app.content.vo;
+package org.aerogear.oauth.oauth_android_app.content.vo;
 
 import android.content.Context;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
 
 /**
  * Created by summers on 3/13/16.

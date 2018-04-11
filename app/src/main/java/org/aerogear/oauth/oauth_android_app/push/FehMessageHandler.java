@@ -1,11 +1,11 @@
-package com.feedhenry.oauth.oauth_android_app.push;
+package org.aerogear.oauth.oauth_android_app.push;
 
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehMessage;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -3,20 +3,21 @@ plugins {
 
 }
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
 
     defaultConfig {
-        applicationId "org.feedhenry.demo.gcmtopicsdemo"
-        minSdkVersion 16
-        targetSdkVersion 23
+        applicationId "org.aerogear.fehbot"
+        minSdkVersion 21
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        testApplicationId "com.feedhenry.oauth.oauth_android_app.test"
+        testApplicationId "org.aerogear.oauth.oauth_android_app.test"
     }
 
     lintOptions {
@@ -38,33 +39,31 @@ license {
 
 configurations.all {
     resolutionStrategy {
-        force 'com.android.support:support-annotations:23.1.1'
+        force 'com.android.support:support-annotations:27.1.1'
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile 'com.android.support.test:runner:0.4'
-    androidTestCompile 'com.android.support.test:rules:0.4'
-    androidTestCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation'com.android.support.test:rules:1.0.1'
+    androidTestImplementation'com.squareup.okhttp:mockwebserver:2.4.0'
 
-    compile 'com.android.support:design:23.+'
-    provided 'com.squareup.dagger:dagger-compiler:1.2.+'
-    compile 'com.feedhenry:fh-android-sdk:3.0.0'
-    compile('org.jboss.aerogear:aerogear-android-push:2.2.2') {
-        exclude group : 'com.google.android.gms';
-    }
-    compile 'com.android.support:appcompat-v7:23.+'
-    compile 'com.android.support:design:23.+'
-    compile 'com.android.support:cardview-v7:23.+'
-    compile 'com.android.support:recyclerview-v7:23.+'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.dagger:dagger:1.2.+'
-    compile 'com.google.android.gms:play-services-base:8.4.0'
-    compile 'com.google.android.gms:play-services-identity:8.4.0'
-    compile 'com.google.android.gms:play-services-auth:8.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.android.support:support-v4:23.+'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.android.support:design:27.1.1'
+
+    implementation 'org.aerogear:core:0.1.0-SNAPSHOT'
+    implementation 'org.aerogear:aerogear-push:0.1.0-SNAPSHOT'
+
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
+
+    implementation 'com.google.android.gms:play-services-base:12.0.1'
+    implementation 'com.google.android.gms:play-services-auth:12.0.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
 }

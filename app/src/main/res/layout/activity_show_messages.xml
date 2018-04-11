@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.feedhenry.oauth.oauth_android_app.ShowMessages">
+    tools:context="org.aerogear.oauth.oauth_android_app.ShowMessages">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"

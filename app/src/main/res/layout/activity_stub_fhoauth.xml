@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.feedhenry.helloworld.test.activity.StubFHOAuthActivity">
+    tools:context="org.aerogear.helloworld.test.activity.StubFHOAuthActivity">
 
     <include layout="@layout/content_stub_fhoauth" />
 

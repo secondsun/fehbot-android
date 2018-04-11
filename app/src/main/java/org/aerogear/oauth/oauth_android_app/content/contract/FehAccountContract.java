@@ -1,10 +1,10 @@
-package com.feedhenry.oauth.oauth_android_app.content.contract;
+package org.aerogear.oauth.oauth_android_app.content.contract;
 
 import android.content.ContentValues;
 import android.database.AbstractCursor;
 import android.net.Uri;
 
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehAccount;
 
 import java.util.Arrays;
 import java.util.List;

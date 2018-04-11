@@ -1,4 +1,4 @@
-package com.feedhenry.oauth.oauth_android_app.util;
+package org.aerogear.oauth.oauth_android_app.util;
 
 import android.content.Context;
 import android.content.res.Resources;

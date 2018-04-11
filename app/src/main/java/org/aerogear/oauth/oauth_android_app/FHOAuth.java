@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.feedhenry.oauth.oauth_android_app;
+package org.aerogear.oauth.oauth_android_app;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,18 +21,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehMessageContract;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
-import com.feedhenry.sdk.FH;
-import com.feedhenry.sdk.FHActCallback;
-import com.feedhenry.sdk.FHResponse;
-import com.feedhenry.sdk.PushConfig;
-import com.feedhenry.sdk.api.FHAuthRequest;
-import com.feedhenry.sdk.api.FHAuthSession;
-import com.feedhenry.sdk.api.FHCloudRequest;
-import com.feedhenry.sdk.utils.DataManager;
-import com.feedhenry.sdk2.FHHttpClient;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehMessageContract;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehAccount;
+import org.aerogear.sdk.FH;
+import org.aerogear.sdk.FHActCallback;
+import org.aerogear.sdk.FHResponse;
+import org.aerogear.sdk.PushConfig;
+import org.aerogear.sdk.api.FHAuthRequest;
+import org.aerogear.sdk.api.FHAuthSession;
+import org.aerogear.sdk.api.FHCloudRequest;
+import org.aerogear.sdk.utils.DataManager;
+import org.aerogear.sdk2.FHHttpClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 import org.json.fh.JSONObject;
@@ -124,7 +124,7 @@ public abstract class FHOAuth extends AppCompatActivity {
     }
 
     protected void doAuth(GoogleSignInResult result, final String ircNick) {
-        FHAuthRequest authRequest = new FHAuthRequest(getApplicationContext(), new com.feedhenry.sdk.api2.FHAuthSession(DataManager.getInstance(), new FHHttpClient()));
+        FHAuthRequest authRequest = new FHAuthRequest(getApplicationContext(), new org.aerogear.sdk.api2.FHAuthSession(DataManager.getInstance(), new FHHttpClient()));
         authRequest.setAuthUser("Android", result.getSignInAccount().getIdToken(), "!");
         try {
             authRequest.executeAsync(new FHActCallback() {

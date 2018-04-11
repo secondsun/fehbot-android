@@ -1,4 +1,4 @@
-package com.feedhenry.oauth.oauth_android_app;
+package org.aerogear.oauth.oauth_android_app;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,12 +10,12 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.feedhenry.oauth.oauth_android_app.content.contract.FehAccountContract;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehAccount;
-import com.feedhenry.oauth.oauth_android_app.content.vo.FehMessage;
-import com.feedhenry.oauth.oauth_android_app.push.AccountLinkHandler;
-import com.feedhenry.oauth.oauth_android_app.push.FehMessageHandler;
-import com.feedhenry.oauth.oauth_android_app.util.ImageFromNameMaker;
+import org.aerogear.oauth.oauth_android_app.content.contract.FehAccountContract;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehAccount;
+import org.aerogear.oauth.oauth_android_app.content.vo.FehMessage;
+import org.aerogear.oauth.oauth_android_app.push.AccountLinkHandler;
+import org.aerogear.oauth.oauth_android_app.push.FehMessageHandler;
+import org.aerogear.oauth.oauth_android_app.util.ImageFromNameMaker;
 
 import org.jboss.aerogear.android.unifiedpush.MessageHandler;
 import org.jboss.aerogear.android.unifiedpush.gcm.UnifiedPushMessage;
